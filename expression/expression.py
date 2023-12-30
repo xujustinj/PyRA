@@ -4,8 +4,8 @@ oh my goodness this is amazing
 """
 
 from abc import ABC, abstractmethod
-from functools import cache, cached_property
-from typing import Any, Callable, Generic, Optional, TypeVar, Union
+from functools import cached_property
+from typing import Any, Generic, Optional, TypeVar, Union
 
 L = TypeVar("L", contravariant=True)
 R = TypeVar("R", contravariant=True)
@@ -48,6 +48,9 @@ class Expression(ABC, Generic[T]):
 
     def __str__(self) -> str:
         return self.fullname
+
+    def __bool__(self) -> bool:
+        return bool(self.get())
 
 class Constant(Expression[T]):
     def __init__(self, value: T, name: Optional[str] = None):

@@ -1,4 +1,4 @@
-from . import PrefixUnaryOperator, InfixBinaryOperator, resolve
+from . import eq, InfixBinaryOperator, PrefixUnaryOperator, resolve
 
 @PrefixUnaryOperator.decorate("-")
 def negate(a: int) -> int:
@@ -12,4 +12,4 @@ def plus(a: int, b: int) -> int:
 def times(a: int, b: int) -> int:
     return a * b
 
-resolve(1 |plus| negate(2) |times| 3)
+assert resolve((1 |plus| negate(2) |times| 3) |eq| -3)
