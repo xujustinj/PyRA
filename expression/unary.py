@@ -1,5 +1,5 @@
 from typing import Callable, Generic, TypeVar
-from functools import cache, cached_property
+from functools import cached_property
 
 from .expression import Expression, as_expression, Value
 
@@ -22,16 +22,19 @@ class PrefixUnaryOperation(Expression[T], Generic[R, T]):
     def rootname(self) -> str:
         return self.operator_name
 
-    @cached_property
+    @property
     def fullname(self) -> str:
         return f"{self.operator_name} {self.right_child.fullname}"
 
-    @cached_property
+    @property
     def right_children(self) -> tuple[Expression[R]]:
         return (self.right_child,)
 
-    @cache
     def get(self) -> T:
+        return self._value
+
+    @cached_property
+    def _value(self) -> T:
         return self.f(self.right_child.get())
 
 
@@ -53,6 +56,6 @@ class PrefixUnaryOperator(Generic[R, T]):
     @classmethod
     def decorate(cls, name: str) -> Callable[
         [Callable[[R], T]],
-        "PrefixUnaryOperator[T]",
+        "PrefixUnaryOperator[R, T]",
     ]:
         return lambda f: cls(f, name=name)

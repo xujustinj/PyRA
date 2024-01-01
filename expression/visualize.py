@@ -1,11 +1,11 @@
-from typing import TypeVar, Optional
+from typing import Any, Optional, TypeVar
 
 from .expression import Expression
 
 
-T: TypeVar = TypeVar("T")
+T = TypeVar("T")
 
-def get_print_width(x: Expression[T], indent: int):
+def get_print_width(x: Expression[Any], indent: int) -> int:
     if x.has_children:
         return max(
             len(x.rootname),
@@ -59,7 +59,7 @@ def resolve(
         print(f"{(prefix + x.rootname).ljust(width)}  = {lines[0]}")
         for line in lines[1:]:
             print(f"{prefix.ljust(width + 4)}{line}")
-    except AssertionError as e:
+    except Exception as e:
         print(f"{(prefix + x.rootname).ljust(width)}  ERROR: {e}")
         raise
     return x.get()

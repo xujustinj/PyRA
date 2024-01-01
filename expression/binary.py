@@ -1,5 +1,5 @@
 from typing import Callable, Generic, TypeVar
-from functools import cache, cached_property
+from functools import cached_property
 
 from .expression import Expression, as_expression, Value
 
@@ -25,20 +25,23 @@ class InfixBinaryOperation(Expression[T], Generic[L, R, T]):
     def rootname(self) -> str:
         return self.operator_name
 
-    @cached_property
+    @property
     def fullname(self) -> str:
         return f"{self.left_child.fullname} {self.operator_name} {self.right_child.fullname}"
 
-    @cached_property
+    @property
     def left_children(self) -> tuple[Expression[L]]:
         return (self.left_child,)
 
-    @cached_property
+    @property
     def right_children(self) -> tuple[Expression[R]]:
         return (self.right_child,)
 
-    @cache
     def get(self) -> T:
+        return self._value
+
+    @cached_property
+    def _value(self) -> T:
         return self.f(self.left_child.get(), self.right_child.get())
 
 
@@ -96,14 +99,14 @@ class InfixBinaryOperator(Generic[L, R, T]):
             right_child=right_child,
         )
 
-    def __ror__(self, left_child: Value[T]) -> LeftPartialInfixBinaryOperator[L, R, T]:
+    def __ror__(self, left_child: Value[L]) -> LeftPartialInfixBinaryOperator[L, R, T]:
         return LeftPartialInfixBinaryOperator(
             self.f,
             operator_name=self.name,
             left_child=left_child,
         )
 
-    def __call__(self, right_child: Value[T]) -> RightPartialInfixBinaryOperator[L, R, T]:
+    def __call__(self, right_child: Value[R]) -> RightPartialInfixBinaryOperator[L, R, T]:
         return RightPartialInfixBinaryOperator(
             self.f,
             operator_name=self.name,

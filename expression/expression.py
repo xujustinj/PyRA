@@ -9,7 +9,7 @@ from typing import Any, Generic, Optional, TypeVar, Union
 
 L = TypeVar("L", contravariant=True)
 R = TypeVar("R", contravariant=True)
-T = TypeVar("T", covariant=True)
+T = TypeVar("T", covariant=True,)
 
 class Expression(ABC, Generic[T]):
     @property
@@ -52,6 +52,7 @@ class Expression(ABC, Generic[T]):
     def __bool__(self) -> bool:
         return bool(self.get())
 
+
 class Constant(Expression[T]):
     def __init__(self, value: T, name: Optional[str] = None):
         self.value = value
@@ -68,6 +69,10 @@ class Constant(Expression[T]):
     def get(self) -> T:
         return self.value
 
+
 Value = Union[Expression[T], T]
 def as_expression(value: Value[T]) -> Expression[T]:
-    return value if isinstance(value, Expression) else Constant(value)
+    if isinstance(value, Expression):
+        # no good way to avoid T
+        return value # type: ignore
+    return Constant(value)
