@@ -22,10 +22,10 @@ We could express this in relational algebra as
 
 $$
 \mathrm{elim}\!\left(
-    \pi_{\#1}\!\left(
+    \pi_{\\#1}\!\left(
         \texttt{STUDENT}
-        \bowtie_{\#1 = \#2\ell}
-        \sigma_{\#3 < 18}\!\left(\texttt{PERSON}\right)
+        \bowtie_{\\#1 = \\#2\ell}
+        \sigma_{\\#3 < 18}\!\left(\texttt{PERSON}\right)
     \right)
 \right)
 \tag{1}
@@ -35,8 +35,8 @@ or
 
 $$
 \mathrm{elim}\!\left(
-    \pi_{\#5}\!\left(
-        \sigma_{\#1 > \#4, \#2 = \#6}\!\left(
+    \pi_{\\#5}\!\left(
+        \sigma_{\\#1 > \\#4, \\#2 = \\#6}\!\left(
             18 \times \texttt{PERSON} \times \texttt{STUDENT}
         \right)
     \right)
@@ -50,10 +50,10 @@ On the other hand, expression $(3)$ below differs from $(1)$ by a single charact
 
 $$
 \mathrm{elim}\!\left(
-    \pi_{\#1}\!\left(
+    \pi_{\\#1}\!\left(
         \texttt{STUDENT}
-        \bowtie_{\textcolor{red}{\#1 = \#1\ell}}
-        \sigma_{\#3 < 18}\!\left(\texttt{PERSON}\right)
+        \bowtie_{\textcolor{red}{\\#1 = \\#1\ell}}
+        \sigma_{\\#3 < 18}\!\left(\texttt{PERSON}\right)
     \right)
 \right)
 \tag{3}
@@ -64,15 +64,15 @@ Meanwhile, expression $(4)$ below is perfectly legal, but still produces an inco
 $$
 \begin{aligned}
     &\mathrm{elim}\!\left(
-        \pi_{\#1}\!\left(
+        \pi_{\\#1}\!\left(
             \texttt{STUDENT}
         \right)
     \right) \\
     &- \mathrm{elim}\!\left(
-        \pi_{\#1}\!\left(
+        \pi_{\\#1}\!\left(
             \texttt{STUDENT}
-            \bowtie_{\#1 = \#2\ell}
-            \sigma_{\#3 \geq 18}\!\left(\texttt{PERSON}\right)
+            \bowtie_{\\#1 = \\#2\ell}
+            \sigma_{\\#3 \geq 18}\!\left(\texttt{PERSON}\right)
         \right)
     \right)
 \end{aligned}
@@ -172,9 +172,9 @@ The following code demonstrates various relational algebra operations using exam
 
 All people under the age of majority:
 $$
-    \sigma_{\#3 \leq 18}\!\left(\texttt{PERSON}\right)
+    \sigma_{\\#3 \leq 18}\!\left(\texttt{PERSON}\right)
 $$
-where $\#3$ refers to the third attribute of `PERSON`.
+where $\\#3$ refers to the third attribute of `PERSON`.
 
 > Attributes are one-indexed.
 > This allows us to do something nifty later on...
@@ -195,7 +195,7 @@ select[3 |lt| AGE_OF_MAJORITY](PERSON)
 
 All names:
 $$
-    \pi_{\#2}\!\left(\texttt{PERSON}\right)
+    \pi_{\\#2}\!\left(\texttt{PERSON}\right)
 $$
 
 ```py
@@ -212,7 +212,7 @@ project[2](PERSON)
 
 All *distinct* student IDs:
 $$
-    \mathrm{elim}\!\left(\pi_{\#1}\!\left(\texttt{STUDENT}\right)\right)
+    \mathrm{elim}\!\left(\pi_{\\#1}\!\left(\texttt{STUDENT}\right)\right)
 $$
 
 ```py
@@ -260,19 +260,19 @@ STUDENT |product| PERSON
 A join is equivalent to a product ($\times$) followed by a selection ($\sigma$).
 For example, we could filter the product between `STUDENT` and `PERSON` on matching guardian ID:
 $$
-    \sigma_{\#2 = \#3}\!\left(\texttt{STUDENT} \times \texttt{PERSON}\right)
+    \sigma_{\\#2 = \\#3}\!\left(\texttt{STUDENT} \times \texttt{PERSON}\right)
 $$
 or we could implement this as a join:
 $$
-    \texttt{STUDENT} \bowtie_{\#1 = \#2\ell} \texttt{PERSON}
+    \texttt{STUDENT} \bowtie_{\\#1 = \\#2\ell} \texttt{PERSON}
 $$
 
 Where $\ell$ indicates an attribute index belonging to the relation on the left, while the absence of $\ell$ indicates an attribute index belonging to the relation on the right.
-In this case, the index $\#1 = \#2\ell$ refers to
-- $\#1$: the first attribute of `PERSON`
-- $\#2\ell$: the second attribute of `STUDENT`
+In this case, the index $\\#1 = \\#2\ell$ refers to
+- $\\#1$: the first attribute of `PERSON`
+- $\\#2\ell$: the second attribute of `STUDENT`
 
-To express this in code, we use negative indices (e.g., $\#2\ell \to \texttt{-2}$) to indicate the left argument.
+To express this in code, we use negative indices (e.g., $\\#2\ell \to \texttt{-2}$) to indicate the left argument.
 
 ```py
 STUDENT |join[1 |eq| -2]| PERSON
@@ -284,13 +284,13 @@ STUDENT |join[1 |eq| -2]| PERSON
 ```
 
 > Notice that the type of the first column of `PERSON` changed following the join.
-> This library is smart enough to figure out that an equality-based selection condition (like $\#1 = \#2\ell$) will result in a type intersection between the participating columns.
+> This library is smart enough to figure out that an equality-based selection condition (like $\\#1 = \\#2\ell$) will result in a type intersection between the participating columns.
 
 ### Difference ($-$)
 
 All ages other than 18:
 $$
-    \pi_{\#3}\!\left(\texttt{PERSON}\right)
+    \pi_{\\#3}\!\left(\texttt{PERSON}\right)
     - 18
 $$
 
@@ -307,9 +307,9 @@ project[3](PERSON) |difference| AGE_OF_MAJORITY
 
 All students or guardians:
 $$
-    \pi_{\#1}\!\left(\texttt{STUDENT}\right)
+    \pi_{\\#1}\!\left(\texttt{STUDENT}\right)
     \cup
-    \pi_{\#2}\!\left(\texttt{STUDENT}\right)
+    \pi_{\\#2}\!\left(\texttt{STUDENT}\right)
 $$
 
 ```py
@@ -343,10 +343,10 @@ The `resolve` function lets us trace the evaluation tree of the expression on ou
 
 $$
 \mathrm{elim}\!\left(
-    \pi_{\#1}\!\left(
+    \pi_{\\#1}\!\left(
         \texttt{STUDENT}
-        \bowtie_{\#1 = \#2\ell}
-        \sigma_{\#3 < 18}\!\left(\texttt{PERSON}\right)
+        \bowtie_{\\#1 = \\#2\ell}
+        \sigma_{\\#3 < 18}\!\left(\texttt{PERSON}\right)
     \right)
 \right)
 $$
@@ -393,8 +393,8 @@ eliminate(project[1](STUDENT |join[1 |eq| -2]| select[3 |lt| AGE_OF_MAJORITY](PE
 
 $$
 \mathrm{elim}\!\left(
-    \pi_{\#5}\!\left(
-        \sigma_{\#1 > \#4, \#2 = \#6}\!\left(
+    \pi_{\\#5}\!\left(
+        \sigma_{\\#1 > \\#4, \\#2 = \\#6}\!\left(
             18 \times \texttt{PERSON} \times \texttt{STUDENT}
         \right)
     \right)
@@ -469,10 +469,10 @@ eliminate(project[5](select[1 |gt| 4, 2 |eq| 6](AGE_OF_MAJORITY |product| PERSON
 
 $$
 \mathrm{elim}\!\left(
-    \pi_{\#1}\!\left(
+    \pi_{\\#1}\!\left(
         \texttt{STUDENT}
-        \bowtie_{\textcolor{red}{\#1 = \#1\ell}}
-        \sigma_{\#3 < 18}\!\left(\texttt{PERSON}\right)
+        \bowtie_{\textcolor{red}{\\#1 = \\#1\ell}}
+        \sigma_{\\#3 < 18}\!\left(\texttt{PERSON}\right)
     \right)
 \right)
 $$
@@ -525,15 +525,15 @@ eliminate(project[1](STUDENT |join[1 |eq| -1]| select[3 |lt| AGE_OF_MAJORITY](PE
 $$
 \begin{aligned}
     &\mathrm{elim}\!\left(
-        \pi_{\#1}\!\left(
+        \pi_{\\#1}\!\left(
             \texttt{STUDENT}
         \right)
     \right) \\
     &- \mathrm{elim}\!\left(
-        \pi_{\#1}\!\left(
+        \pi_{\\#1}\!\left(
             \texttt{STUDENT}
-            \bowtie_{\#1 = \#2\ell}
-            \sigma_{\#3 \geq 18}\!\left(\texttt{PERSON}\right)
+            \bowtie_{\\#1 = \\#2\ell}
+            \sigma_{\\#3 \geq 18}\!\left(\texttt{PERSON}\right)
         \right)
     \right)
 \end{aligned}
