@@ -171,9 +171,11 @@ The following code demonstrates various relational algebra operations using exam
 ### Selection ($\sigma$)
 
 All people under the age of majority:
+
 $$
     \sigma_{\\#3 \leq 18}\!\left(\texttt{PERSON}\right)
 $$
+
 where $\\#3$ refers to the third attribute of `PERSON`.
 
 > Attributes are one-indexed.
@@ -194,6 +196,7 @@ select[3 |lt| AGE_OF_MAJORITY](PERSON)
 ### Projection ($\pi$)
 
 All names:
+
 $$
     \pi_{\\#2}\!\left(\texttt{PERSON}\right)
 $$
@@ -211,6 +214,7 @@ project[2](PERSON)
 ### Elimination ($\mathrm{elim}$)
 
 All *distinct* student IDs:
+
 $$
     \mathrm{elim}\!\left(\pi_{\\#1}\!\left(\texttt{STUDENT}\right)\right)
 $$
@@ -226,6 +230,7 @@ eliminate(project[1](STUDENT))
 ### Product ($\times$)
 
 All possible pairs of elements from the relations `STUDENT` and `PERSON`:
+
 $$
     \texttt{STUDENT} \times \texttt{PERSON}
 $$
@@ -259,10 +264,13 @@ STUDENT |product| PERSON
 
 A join is equivalent to a product ($\times$) followed by a selection ($\sigma$).
 For example, we could filter the product between `STUDENT` and `PERSON` on matching guardian ID:
+
 $$
     \sigma_{\\#2 = \\#3}\!\left(\texttt{STUDENT} \times \texttt{PERSON}\right)
 $$
+
 or we could implement this as a join:
+
 $$
     \texttt{STUDENT} \bowtie_{\\#1 = \\#2\ell} \texttt{PERSON}
 $$
@@ -289,6 +297,7 @@ STUDENT |join[1 |eq| -2]| PERSON
 ### Difference ($-$)
 
 All ages other than 18:
+
 $$
     \pi_{\\#3}\!\left(\texttt{PERSON}\right)
     - 18
@@ -306,6 +315,7 @@ project[3](PERSON) |difference| AGE_OF_MAJORITY
 ### Union ($\cup$)
 
 All students or guardians:
+
 $$
     \pi_{\\#1}\!\left(\texttt{STUDENT}\right)
     \cup
