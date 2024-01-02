@@ -1,8 +1,3 @@
-"""
-https://tomerfiliba.com/blog/Infix-Operators
-oh my goodness this is amazing
-"""
-
 from abc import ABC, abstractmethod
 from functools import cached_property
 from typing import Any, Generic, Optional, TypeVar, Union
