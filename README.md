@@ -21,11 +21,11 @@ Suppose we wanted a query to find the IDs of all students who have one or more g
 We could express this in relational algebra as
 
 $$
-\mathrm{elim}\!\left(
-    \pi_{\\#1}\!\left(
+\mathrm{elim}\\!\left(
+    \pi_{\\#1}\\!\left(
         \texttt{STUDENT}
         \bowtie_{\\#1 = \\#2\ell}
-        \sigma_{\\#3 < 18}\!\left(\texttt{PERSON}\right)
+        \sigma_{\\#3 < 18}\\!\left(\texttt{PERSON}\right)
     \right)
 \right)
 \tag{1}
@@ -34,9 +34,9 @@ $$
 or
 
 $$
-\mathrm{elim}\!\left(
-    \pi_{\\#5}\!\left(
-        \sigma_{\\#1 > \\#4, \\#2 = \\#6}\!\left(
+\mathrm{elim}\\!\left(
+    \pi_{\\#5}\\!\left(
+        \sigma_{\\#1 > \\#4, \\#2 = \\#6}\\!\left(
             18 \times \texttt{PERSON} \times \texttt{STUDENT}
         \right)
     \right)
@@ -49,11 +49,11 @@ and so on.
 On the other hand, expression $(3)$ below differs from $(1)$ by a single character, but it is invalid because it joins the wrong attributes.
 
 $$
-\mathrm{elim}\!\left(
-    \pi_{\\#1}\!\left(
+\mathrm{elim}\\!\left(
+    \pi_{\\#1}\\!\left(
         \texttt{STUDENT}
         \bowtie_{\textcolor{red}{\\#1 = \\#1\ell}}
-        \sigma_{\\#3 < 18}\!\left(\texttt{PERSON}\right)
+        \sigma_{\\#3 < 18}\\!\left(\texttt{PERSON}\right)
     \right)
 \right)
 \tag{3}
@@ -63,16 +63,16 @@ Meanwhile, expression $(4)$ below is perfectly legal, but still produces an inco
 
 $$
 \begin{aligned}
-    &\mathrm{elim}\!\left(
-        \pi_{\\#1}\!\left(
+    &\mathrm{elim}\\!\left(
+        \pi_{\\#1}\\!\left(
             \texttt{STUDENT}
         \right)
     \right) \\
-    &- \mathrm{elim}\!\left(
-        \pi_{\\#1}\!\left(
+    &- \mathrm{elim}\\!\left(
+        \pi_{\\#1}\\!\left(
             \texttt{STUDENT}
             \bowtie_{\\#1 = \\#2\ell}
-            \sigma_{\\#3 \geq 18}\!\left(\texttt{PERSON}\right)
+            \sigma_{\\#3 \geq 18}\\!\left(\texttt{PERSON}\right)
         \right)
     \right)
 \end{aligned}
@@ -173,7 +173,7 @@ The following code demonstrates various relational algebra operations using exam
 All people under the age of majority:
 
 $$
-    \sigma_{\\#3 \leq 18}\!\left(\texttt{PERSON}\right)
+    \sigma_{\\#3 \leq 18}\\!\left(\texttt{PERSON}\right)
 $$
 
 where $\\#3$ refers to the third attribute of `PERSON`.
@@ -198,7 +198,7 @@ select[3 |lt| AGE_OF_MAJORITY](PERSON)
 All names:
 
 $$
-    \pi_{\\#2}\!\left(\texttt{PERSON}\right)
+    \pi_{\\#2}\\!\left(\texttt{PERSON}\right)
 $$
 
 ```py
@@ -216,7 +216,7 @@ project[2](PERSON)
 All *distinct* student IDs:
 
 $$
-    \mathrm{elim}\!\left(\pi_{\\#1}\!\left(\texttt{STUDENT}\right)\right)
+    \mathrm{elim}\\!\left(\pi_{\\#1}\\!\left(\texttt{STUDENT}\right)\right)
 $$
 
 ```py
@@ -266,7 +266,7 @@ A join is equivalent to a product ($\times$) followed by a selection ($\sigma$).
 For example, we could filter the product between `STUDENT` and `PERSON` on matching guardian ID:
 
 $$
-    \sigma_{\\#2 = \\#3}\!\left(\texttt{STUDENT} \times \texttt{PERSON}\right)
+    \sigma_{\\#2 = \\#3}\\!\left(\texttt{STUDENT} \times \texttt{PERSON}\right)
 $$
 
 or we could implement this as a join:
@@ -299,7 +299,7 @@ STUDENT |join[1 |eq| -2]| PERSON
 All ages other than 18:
 
 $$
-    \pi_{\\#3}\!\left(\texttt{PERSON}\right)
+    \pi_{\\#3}\\!\left(\texttt{PERSON}\right)
     - 18
 $$
 
@@ -317,9 +317,9 @@ project[3](PERSON) |difference| AGE_OF_MAJORITY
 All students or guardians:
 
 $$
-    \pi_{\\#1}\!\left(\texttt{STUDENT}\right)
+    \pi_{\\#1}\\!\left(\texttt{STUDENT}\right)
     \cup
-    \pi_{\\#2}\!\left(\texttt{STUDENT}\right)
+    \pi_{\\#2}\\!\left(\texttt{STUDENT}\right)
 $$
 
 ```py
@@ -352,11 +352,11 @@ The `resolve` function lets us trace the evaluation tree of the expression on ou
 ### Expression $(1)$: Correct
 
 $$
-\mathrm{elim}\!\left(
-    \pi_{\\#1}\!\left(
+\mathrm{elim}\\!\left(
+    \pi_{\\#1}\\!\left(
         \texttt{STUDENT}
         \bowtie_{\\#1 = \\#2\ell}
-        \sigma_{\\#3 < 18}\!\left(\texttt{PERSON}\right)
+        \sigma_{\\#3 < 18}\\!\left(\texttt{PERSON}\right)
     \right)
 \right)
 $$
@@ -402,9 +402,9 @@ eliminate(project[1](STUDENT |join[1 |eq| -2]| select[3 |lt| AGE_OF_MAJORITY](PE
 ### Expression $(2)$: Correct
 
 $$
-\mathrm{elim}\!\left(
-    \pi_{\\#5}\!\left(
-        \sigma_{\\#1 > \\#4, \\#2 = \\#6}\!\left(
+\mathrm{elim}\\!\left(
+    \pi_{\\#5}\\!\left(
+        \sigma_{\\#1 > \\#4, \\#2 = \\#6}\\!\left(
             18 \times \texttt{PERSON} \times \texttt{STUDENT}
         \right)
     \right)
@@ -478,11 +478,11 @@ eliminate(project[5](select[1 |gt| 4, 2 |eq| 6](AGE_OF_MAJORITY |product| PERSON
 ### Expression $(3)$: Incorrect
 
 $$
-\mathrm{elim}\!\left(
-    \pi_{\\#1}\!\left(
+\mathrm{elim}\\!\left(
+    \pi_{\\#1}\\!\left(
         \texttt{STUDENT}
         \bowtie_{\textcolor{red}{\\#1 = \\#1\ell}}
-        \sigma_{\\#3 < 18}\!\left(\texttt{PERSON}\right)
+        \sigma_{\\#3 < 18}\\!\left(\texttt{PERSON}\right)
     \right)
 \right)
 $$
@@ -534,16 +534,16 @@ eliminate(project[1](STUDENT |join[1 |eq| -1]| select[3 |lt| AGE_OF_MAJORITY](PE
 
 $$
 \begin{aligned}
-    &\mathrm{elim}\!\left(
-        \pi_{\\#1}\!\left(
+    &\mathrm{elim}\\!\left(
+        \pi_{\\#1}\\!\left(
             \texttt{STUDENT}
         \right)
     \right) \\
-    &- \mathrm{elim}\!\left(
-        \pi_{\\#1}\!\left(
+    &- \mathrm{elim}\\!\left(
+        \pi_{\\#1}\\!\left(
             \texttt{STUDENT}
             \bowtie_{\\#1 = \\#2\ell}
-            \sigma_{\\#3 \geq 18}\!\left(\texttt{PERSON}\right)
+            \sigma_{\\#3 \geq 18}\\!\left(\texttt{PERSON}\right)
         \right)
     \right)
 \end{aligned}
